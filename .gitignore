@@ -1,20 +1,27 @@
+# Ferramentas de IA e Editores
 .claude/
 .codex/
 .cursor/
 .github/
+.gemini/
+.vscode/
+
+# Ambiente Python
 .venv/
 __pycache__/
 .env/
+
+# Arquivos de cache do Xano (gerados localmente)
 .xano/
-.addons/
-.agents/
-.apis/
-.functions/
-.mcp_servers/
-.middlewares/
-.openspec/
-.realtime/
-.tables/
-.tasks/
-.tools/
-.workflow_tests/
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de log
+*.log
+
+# Arquivos de build e distribuição
+build/
+dist/
+*.egg-info/

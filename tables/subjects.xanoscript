@@ -1,0 +1,19 @@
+{
+  "name": "subjects",
+  "columns": [
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "user_id",
+      "type": "integer"
+    }
+  ],
+  "relations": [
+    {
+      "from": "user_id",
+      "to": "user.id"
+    }
+  ]
+}
