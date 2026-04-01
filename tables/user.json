@@ -1,0 +1,33 @@
+{
+  "name": "user",
+  "fields": [
+    {
+      "name": "id",
+      "type": "integer"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp"
+    },
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "email",
+      "type": "email"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "user_pkey",
+      "type": "primary",
+      "columns": ["id"]
+    },
+    {
+      "name": "user_email_key",
+      "type": "unique",
+      "columns": ["email"]
+    }
+  ]
+}
