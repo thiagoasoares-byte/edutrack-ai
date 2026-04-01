@@ -1,0 +1,45 @@
+{
+  "name": "subjects",
+  "fields": [
+    {
+      "name": "id",
+      "type": "integer"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp"
+    },
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "user_id",
+      "type": "integer",
+      "tableReference": {
+        "table": "user",
+        "column": "id"
+      }
+    },
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "teacher",
+      "type": "text"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "subjects_pkey",
+      "type": "primary",
+      "columns": ["id"]
+    },
+    {
+      "name": "subjects_user_id_idx",
+      "type": "btree",
+      "columns": ["user_id"]
+    }
+  ]
+}
