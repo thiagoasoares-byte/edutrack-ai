@@ -25,3 +25,22 @@ Thumbs.db
 build/
 dist/
 *.egg-info/
+
+# Arquivos compilados e de cache do Python
+*.py[cod]
+
+# Outras pastas de ambiente virtual
+venv/
+env/
+
+# Arquivo de variáveis de ambiente
+.env
+
+# Relatórios de teste e cobertura
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Arquivos de backup/swap do editor
+*~
+*.swp
