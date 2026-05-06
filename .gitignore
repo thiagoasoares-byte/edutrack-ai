@@ -1,46 +1,45 @@
-# Ferramentas de IA e Editores
-.claude/
-.codex/
-.cursor/
-.github/
-.gemini/
-.vscode/
+# Dependencies
+node_modules/
 
-# Ambiente Python
+# Python
 .venv/
+venv/
+env/
 __pycache__/
-.env/
+*.pyc
+*.pyo
+*.pyd
 
-# Arquivos de cache do Xano (gerados localmente)
-.xano/
-
-# Arquivos de sistema operacional
-.DS_Store
-Thumbs.db
-
-# Arquivos de log
-*.log
-
-# Arquivos de build e distribuição
+# Build artifacts
 build/
 dist/
 *.egg-info/
 
-# Arquivos compilados e de cache do Python
-*.py[cod]
-
-# Outras pastas de ambiente virtual
-venv/
-env/
-
-# Arquivo de variáveis de ambiente
+# Environment variables
 .env
+.env.*
+!.env.example
 
-# Relatórios de teste e cobertura
+# AI tool and editor configs
+.claude/
+.codex/
+.cursor/
+.gemini/
+.vscode/
+.xano/
+
+# Test and coverage reports
 .coverage
 .pytest_cache/
 htmlcov/
 
-# Arquivos de backup/swap do editor
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Editor backup/swap files
 *~
 *.swp
