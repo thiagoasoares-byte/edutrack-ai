@@ -3,9 +3,58 @@
     "id": 390207,
     "type": "api_group",
     "path": "apis/edutrack/api_group.xs",
-    "status": "unchanged",
+    "status": "changed",
     "staged": false,
     "sha256": "15205de9cadac8ea408c99c94d9b51b258b41a3e3ffcc43350e64928d46ba762",
     "original": "YXBpX2dyb3VwIGVkdXRyYWNrIHsKICBjYW5vbmljYWwgPSAiTU1GakJkVFYiCn0="
+  },
+  {
+    "id": 0,
+    "path": "tables/academic_tasks.xs",
+    "status": "new",
+    "type": "table",
+    "staged": false
+  },
+  {
+    "id": 0,
+    "path": "apis/edutrack/subjects/api_group.xs",
+    "status": "new",
+    "type": "api_group",
+    "staged": false
+  },
+  {
+    "id": 0,
+    "path": "apis/edutrack/subjects/delete.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": false
+  },
+  {
+    "id": 0,
+    "path": "apis/edutrack/subjects/get.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": false
+  },
+  {
+    "id": 0,
+    "path": "apis/edutrack/subjects/get_id.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": false
+  },
+  {
+    "id": 0,
+    "path": "apis/edutrack/subjects/patch.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": false
+  },
+  {
+    "id": 0,
+    "path": "apis/edutrack/subjects/post.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": false
   }
 ]

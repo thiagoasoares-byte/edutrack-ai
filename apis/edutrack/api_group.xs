@@ -1,3 +1,3 @@
 api_group edutrack {
-  canonical = "MMFjBdTV"
+  description = "EduTrack API endpoints for managing academic data"
 }
