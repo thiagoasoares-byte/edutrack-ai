@@ -1,46 +1,193 @@
-# Ferramentas de IA e Editores
-.claude/
-.codex/
-.cursor/
-.github/
-.gemini/
-.vscode/
+# ===========================================
+# EduTrack AI - .gitignore
+# ===========================================
+# Este arquivo ignora arquivos/pastas desnecessárias
+# para manter o repositório limpo e focado apenas
+# no código fonte e configurações essenciais.
 
-# Ambiente Python
-.venv/
+# ===========================================
+# Python (Streamlit Frontend)
+# ===========================================
 __pycache__/
-.env/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Arquivos de cache do Xano (gerados localmente)
+# Ambientes virtuais Python
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Arquivos de configuração do Python
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# ===========================================
+# Node.js (se usado para ferramentas/dev)
+# ===========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ===========================================
+# Xano (Backend)
+# ===========================================
+# Arquivos de cache e configurações locais do Xano
 .xano/
+*.xano-cache
 
-# Arquivos de sistema operacional
+# ===========================================
+# IDEs e Editores
+# ===========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db
+*.tmp
+*.temp
 
-# Arquivos de log
+# ===========================================
+# Ferramentas de IA e Assistentes
+# ===========================================
+# Estes podem ser versionados se contiverem configurações importantes
+# Mas geralmente são pessoais - descomente se quiser ignorar:
+# .claude/
+# .codex/
+# .cursor/
+# .github/
+# .gemini/
+
+# ===========================================
+# Logs e Arquivos Temporários
+# ===========================================
 *.log
+logs/
+*.log.*
+log.txt
+*.tmp
+*.temp
+.cache/
+.tmp/
 
-# Arquivos de build e distribuição
+# ===========================================
+# Arquivos de Sistema Operacional
+# ===========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ===========================================
+# Arquivos de Backup e Swap
+# ===========================================
+*~
+*.swp
+*.swo
+*.bak
+*.backup
+*.old
+
+# ===========================================
+# Arquivos de Build e Distribuição
+# ===========================================
 build/
 dist/
 *.egg-info/
+*.tar.gz
+*.zip
 
-# Arquivos compilados e de cache do Python
-*.py[cod]
-
-# Outras pastas de ambiente virtual
-venv/
-env/
-
-# Arquivo de variáveis de ambiente
-.env
-
-# Relatórios de teste e cobertura
+# ===========================================
+# Arquivos de Teste e Cobertura
+# ===========================================
 .coverage
 .pytest_cache/
 htmlcov/
+.tox/
+.nox/
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
 
-# Arquivos de backup/swap do editor
-*~
-*.swp
+# ===========================================
+# Documentação Gerada
+# ===========================================
+# Geralmente queremos versionar a documentação fonte
+# Mas ignorar arquivos gerados automaticamente
+docs/_build/
+docs/build/
+*.pdf
+*.docx
+
+# ===========================================
+# Arquivos Sensíveis
+# ===========================================
+# Nunca subir chaves, senhas, tokens, etc.
+*.key
+*.pem
+*.crt
+*.p12
+secrets.json
+config.local.*
+*.secret
+.env.local
+.env.production
+.env.staging
+
+# ===========================================
+# Arquivos de Desenvolvimento Local
+# ===========================================
+# Arquivos pessoais de desenvolvimento
+.local
+.personal
+.dev
