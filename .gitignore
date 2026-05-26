@@ -1,0 +1,70 @@
+# Dependencies
+node_modules/
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# AI tool and editor configs
+.claude/
+.codex/
+.cursor/
+.gemini/
+.vscode/
+
+# Test and coverage reports
+.coverage
+.pytest_cache/
+htmlcov/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Editor backup/swap files
+*~
+*.swp
+
+# IDEs / editors
+.idea/
+.ropeproject/
+
+# Python tool caches
+.mypy_cache/
+.pytest_cache/
+.cache/
+
+# Streamlit
+.streamlit/
+
+# Editor/project settings that may contain secrets
+.env.local
+.python-version
+
+# Keys and certificates
+*.pem
+*.key
+*.crt
+
+# Credentials
+credentials.json
+.secrets/
+
