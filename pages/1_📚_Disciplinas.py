@@ -4,9 +4,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import utils.api  as api
 import utils.auth as auth
+import utils.ui as ui
 from datetime import date
 
-st.set_page_config(page_title="Disciplinas", page_icon="📚", layout="wide")
+ui.apply_theme(page_title="Disciplinas", page_icon="📚", layout="wide")
 auth.require_auth()
 
 # ── Sidebar logout ────────────────────────────────────────────────────────────
@@ -23,7 +24,7 @@ def load_subjects(search="", only_overdue=False):
     if search:
         params["name"] = search
     try:
-        data = api.get("subjects", "/subjects", params)
+        data = api.get("subject", "/list", params)
         items = data if isinstance(data, list) else data.get("items", data.get("result", []))
     except Exception as e:
         st.error(f"Erro ao carregar disciplinas: {e}")
@@ -34,7 +35,7 @@ def load_subjects(search="", only_overdue=False):
 
 def load_tasks_for_subject(subject_id):
     try:
-        data = api.get("academic_tasks", "/academic_tasks", {"subject_id": subject_id})
+        data = api.get("academic_tasks", "/list", {"subject_id": subject_id})
         return data if isinstance(data, list) else data.get("items", data.get("result", []))
     except Exception:
         return []
@@ -91,7 +92,7 @@ with tab_lista:
                     cc1, cc2 = st.columns(2)
                     if cc1.button("Sim, excluir", key=f"conf_yes_{sid}", type="primary"):
                         try:
-                            api.delete("subjects", f"/subjects/{sid}")
+                            api.delete("subject", f"/{sid}")
                             st.success("Disciplina excluída.")
                             st.session_state.pop(f"confirm_del_{sid}", None)
                             st.rerun()
@@ -115,7 +116,7 @@ with tab_lista:
                         cancel = ec2.form_submit_button("✖️ Cancelar", use_container_width=True)
                         if save:
                             try:
-                                api.patch("subjects", f"/subjects/{sid}", {
+                                api.patch("subject", f"/{sid}", {
                                     "name": new_name, "teacher": new_teacher,
                                     "semester": new_sem, "description": new_desc,
                                 })
@@ -143,7 +144,7 @@ with tab_nova:
                 st.error("Nome e professor são obrigatórios.")
             else:
                 try:
-                    api.post("subjects", "/subjects", {
+                    api.post("subject", "/create", {
                         "name": nome, "teacher": professor,
                         "semester": semestre, "description": descricao,
                     })

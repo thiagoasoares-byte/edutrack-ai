@@ -4,9 +4,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import utils.api  as api
 import utils.auth as auth
+import utils.ui as ui
 from datetime import date, datetime
 
-st.set_page_config(page_title="Tarefas", page_icon="📝", layout="wide")
+ui.apply_theme(page_title="Tarefas", page_icon="📝", layout="wide")
 auth.require_auth()
 
 with st.sidebar:
@@ -22,7 +23,7 @@ PRIORITY_ICON    = {"Alta": "🔴", "Média": "🟡", "Baixa": "🟢"}
 
 def load_subjects():
     try:
-        data = api.get("subjects", "/subjects")
+        data = api.get("subject", "/list")
         items = data if isinstance(data, list) else data.get("items", data.get("result", []))
         return items
     except Exception:
@@ -35,7 +36,7 @@ def load_tasks(subject_id=None, status_filter=None):
     if status_filter and status_filter != "Todas":
         params["status"] = status_filter
     try:
-        data = api.get("academic_tasks", "/academic_tasks", params)
+        data = api.get("academic_tasks", "/list", params)
         return data if isinstance(data, list) else data.get("items", data.get("result", []))
     except Exception as e:
         st.error(f"Erro ao carregar tarefas: {e}")
@@ -96,7 +97,7 @@ with tab_lista:
                 if status != "Concluída":
                     if st.button("✅ Concluir", key=f"done_{tid}", use_container_width=True):
                         try:
-                            api.patch("academic_tasks", f"/academic_tasks/{tid}",
+                            api.patch("academic_tasks", f"/{tid}",
                                       {"status": "Concluída"})
                             st.rerun()
                         except Exception as e:
@@ -111,7 +112,7 @@ with tab_lista:
                 cd1, cd2 = st.columns(2)
                 if cd1.button("Confirmar", key=f"tcy_{tid}", type="primary"):
                     try:
-                        api.delete("academic_tasks", f"/academic_tasks/{tid}")
+                        api.delete("academic_tasks", f"/{tid}")
                         st.success("Tarefa excluída.")
                         st.session_state.pop(f"t_confirm_{tid}", None)
                         st.rerun()
@@ -138,7 +139,7 @@ with tab_lista:
                     cn = es2.form_submit_button("✖️ Cancelar", use_container_width=True)
                     if sv:
                         try:
-                            api.patch("academic_tasks", f"/academic_tasks/{tid}", {
+                            api.patch("academic_tasks", f"/{tid}", {
                                 "title": nt, "description": nd,
                                 "due_date": ndue.isoformat(), "status": nst,
                                 "priority": npr, "subject_id": nsid,
@@ -191,7 +192,7 @@ with tab_nova:
                     st.error("Título e disciplina são obrigatórios.")
                 else:
                     try:
-                        api.post("academic_tasks", "/academic_tasks", {
+                        api.post("academic_tasks", "/create", {
                             "title": titulo,
                             "description": descricao,
                             "due_date": prazo.isoformat(),

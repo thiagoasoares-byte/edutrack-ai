@@ -21,12 +21,12 @@ st.title("📊 Relatórios e Progresso")
 @st.cache_data(ttl=30)
 def fetch_all(token):
     try:
-        sd = api.get("subjects", "/subjects")
+        sd = api.get("subject", "/list")
         subjs = sd if isinstance(sd, list) else sd.get("items", sd.get("result", []))
     except Exception:
         subjs = []
     try:
-        td = api.get("academic_tasks", "/academic_tasks")
+        td = api.get("academic_tasks", "/list")
         tasks = td if isinstance(td, list) else td.get("items", td.get("result", []))
     except Exception:
         tasks = []

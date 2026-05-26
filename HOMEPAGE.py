@@ -4,14 +4,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import utils.api as api
 import utils.auth as auth
+import utils.ui as ui
 from datetime import date, datetime
 
-st.set_page_config(
-    page_title="EduTrack AI",
-    page_icon="🎓",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+ui.apply_theme(page_title="EduTrack AI", page_icon="🎓", layout="wide")
 
 # ── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
@@ -35,9 +31,12 @@ if not auth.is_logged_in():
 
     col_l, col_c, col_r = st.columns([1,2,1])
     with col_c:
-        st.markdown("## 🎓 EduTrack AI")
-        st.caption("Seu assistente acadêmico inteligente")
-        st.markdown("---")
+        st.markdown("""
+            <div class='card' style='padding: 24px; border-radius: 24px; margin-bottom: 24px;'>
+            <h1 class='page-title'>🎓 EduTrack AI</h1>
+            <p class='page-sub'>Seu assistente acadêmico inteligente com visual moderno, leve e fácil de usar.</p>
+            </div>
+        """, unsafe_allow_html=True)
 
         tab_login, tab_signup = st.tabs(["Entrar", "Criar conta"])
 
@@ -56,6 +55,8 @@ if not auth.is_logged_in():
                             st.rerun()
                         except Exception as e:
                             st.error(f"Erro: {e}")
+                            if "workspace no longer exists" in str(e).lower():
+                                st.info("Defina a variável de ambiente API_BASE_URL para o workspace Xano correto.")
 
         with tab_signup:
             with st.form("form_signup"):

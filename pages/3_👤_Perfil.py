@@ -4,8 +4,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import utils.api  as api
 import utils.auth as auth
+import utils.ui as ui
 
-st.set_page_config(page_title="Perfil", page_icon="👤", layout="centered")
+ui.apply_theme(page_title="Perfil", page_icon="👤", layout="centered")
 auth.require_auth()
 
 with st.sidebar:
@@ -50,7 +51,7 @@ with st.form("form_perfil"):
                 st.info("Nenhuma alteração detectada.")
             else:
                 try:
-                    resp = api.patch("auth", "/auth/me", payload)
+                    resp = api.patch("auth", "/update_profile", payload)
                     updated = resp.get("user", resp)
                     st.session_state["user"] = updated
                     st.success("✅ Perfil atualizado com sucesso!")
@@ -68,7 +69,7 @@ with st.form("form_reset"):
     send = st.form_submit_button("📧 Enviar link de redefinição")
     if send:
         try:
-            api.post("auth", "/auth/forgot-password", {"email": reset_email})
+            api.post("auth", "/forgot_password", {"email": reset_email})
             st.success("E-mail enviado! Verifique sua caixa de entrada.")
         except Exception as e:
             st.error(f"Erro: {e}")
