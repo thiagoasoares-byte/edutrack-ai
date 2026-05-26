@@ -4,17 +4,16 @@ All requests go through here, automatically attaching the auth token from sessio
 """
 import streamlit as st
 import requests
-import os
 from typing import Optional
 
-# Allow configuring the deployed Xano instance or an explicit API base URL via env vars
-# - If `API_BASE_URL` is set, it is used as the full base URL
-# - Otherwise `XANO_INSTANCE` is used to build the default Xano URL (legacy default preserved)
-INSTANCE = os.environ.get("XANO_INSTANCE", "x8ki-letl-twmt")
-BASE_URL = os.environ.get("API_BASE_URL", f"https://{INSTANCE}.n7.xano.io/api")
+# Default Xano instance for this project — requests will always point here by default.
+# This makes the frontend work without needing a .env file. If you ever need to
+# override in a special environment, you can change this constant.
+INSTANCE = "x8ki-letl-twmt"
+BASE_URL = f"https://{INSTANCE}.n7.xano.io/api"
 
 # Request timeout (seconds)
-DEFAULT_TIMEOUT = int(os.environ.get("API_TIMEOUT", "15"))
+DEFAULT_TIMEOUT = 15
 
 GROUPS = {
     "auth":           f"{BASE_URL}:auth",

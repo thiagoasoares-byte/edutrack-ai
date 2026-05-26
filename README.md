@@ -117,38 +117,8 @@ Notes:
 
 If you want, I can also add a `.env.example` and a short `README` snippet showing how to store these variables in an env file.
 
-### Using a .env file
+### Default Xano configuration (no .env required)
 
-You can store your environment variables in a `.env` file copied from `.env.example`.
+The frontend is configured to point to the project's Xano workspace by default — you do not need a `.env` file to run the app locally. The base URL is embedded in `utils/api.py` and points to the instance used for this project.
 
-1. Copy the example and fill values:
-
-```powershell
-copy .env.example .env
-notepad .env   # edit values on Windows
-```
-
-2. Load the variables into your shell session and run Streamlit:
-
-- Bash / WSL / macOS:
-
-```bash
-export $(grep -v '^#' .env | xargs)
-streamlit run HOMEPAGE.py
-```
-
-- PowerShell:
-
-```powershell
-Get-Content .env | ForEach-Object {
-    if ($_ -match '^\s*#') { return }
-    $p = $_ -split '='
-    if ($p.Length -eq 2) { $env:$($p[0]) = $p[1] }
-}
-streamlit run HOMEPAGE.py
-```
-
-3. Notes:
-- `API_BASE_URL` takes precedence over `XANO_INSTANCE` if both are set.
-- Keep `.env` out of version control; add it to `.gitignore` if needed.
-- Optionally use `python-dotenv` to load `.env` programmatically in development.
+If you prefer an alternative setup (e.g., for CI or another deployment), you can still edit `utils/api.py` to change the `INSTANCE` or `BASE_URL` constants.
