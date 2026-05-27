@@ -20,6 +20,16 @@ st.title("📝 Minhas Tarefas")
 STATUS_OPTIONS   = ["Pendente", "Em andamento", "Concluída"]
 PRIORITY_OPTIONS = ["Baixa", "Média", "Alta"]
 PRIORITY_ICON    = {"Alta": "🔴", "Média": "🟡", "Baixa": "🟢"}
+SUBJECT_COLORS = [
+    "#FF8A65", "#4DB6AC", "#9575CD", "#FDD835", "#64B5F6",
+    "#A1887F", "#81C784", "#BA68C8", "#FFB74D", "#90A4AE"
+]
+STATUS_COLORS = {
+    "Pendente": "#FB8C00",
+    "Em andamento": "#42A5F5",
+    "Concluída": "#66BB6A",
+    "Atrasado": "#E53935",
+}
 
 def load_subjects():
     try:
@@ -44,6 +54,10 @@ def load_tasks(subject_id=None, status_filter=None):
 
 subjects = load_subjects()
 subj_map = {s["id"]: s.get("name","") for s in subjects}
+subj_color_map = {
+    s["id"]: SUBJECT_COLORS[i % len(SUBJECT_COLORS)]
+    for i, s in enumerate(subjects)
+}
 
 tab_lista, tab_nova = st.tabs(["📋 Minhas Tarefas", "➕ Nova Tarefa"])
 
@@ -89,15 +103,19 @@ with tab_lista:
         with st.container(border=True):
             h1, h2 = st.columns([4,1])
             with h1:
-                st.markdown(f"**{picon} {task.get('title','Sem título')}**")
-                st.caption(f"📚 {subj_nm}  •  {due_color} {due}  •  Status: {status}")
+                status_display = "Atrasado" if status != "Concluída" and due and due < today_str else status
+                status_color = STATUS_COLORS.get(status_display, "#999999")
+                st.markdown(
+                    f"<span style='color:{subj_color_map.get(task.get('subject_id'), '#000000')}; font-weight:bold'>📚 {subj_nm}</span>  •  "
+                    f"<span style='color:{status_color}; font-weight:bold'>{status_display}</span>  •  "
+                    f"{due_color} {due}", unsafe_allow_html=True)
                 if task.get("description"):
                     st.markdown(f"_{task['description']}_")
             with h2:
                 if status != "Concluída":
                     if st.button("✅ Concluir", key=f"done_{tid}", use_container_width=True):
                         try:
-                            api.patch("academic_tasks", f"/{tid}",
+                            api.patch("academic_tasks", f"/task/{tid}",
                                       {"status": "Concluída"})
                             st.rerun()
                         except Exception as e:
@@ -112,7 +130,7 @@ with tab_lista:
                 cd1, cd2 = st.columns(2)
                 if cd1.button("Confirmar", key=f"tcy_{tid}", type="primary"):
                     try:
-                        api.delete("academic_tasks", f"/{tid}")
+                        api.delete("academic_tasks", f"/task/{tid}")
                         st.success("Tarefa excluída.")
                         st.session_state.pop(f"t_confirm_{tid}", None)
                         st.rerun()
@@ -139,7 +157,7 @@ with tab_lista:
                     cn = es2.form_submit_button("✖️ Cancelar", use_container_width=True)
                     if sv:
                         try:
-                            api.patch("academic_tasks", f"/{tid}", {
+                            api.patch("academic_tasks", f"/task/{tid}", {
                                 "title": nt, "description": nd,
                                 "due_date": ndue.isoformat(), "status": nst,
                                 "priority": npr, "subject_id": nsid,

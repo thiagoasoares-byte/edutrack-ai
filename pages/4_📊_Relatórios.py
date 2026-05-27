@@ -7,6 +7,49 @@ import utils.auth as auth
 from datetime import date
 import json, io
 
+
+def _pdf_escape(text: str) -> str:
+    return text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
+
+
+def generate_pdf_report(rows, title="Relatório de Tarefas"):
+    # Produz um PDF simples em bytes sem dependências externas.
+    content_lines = []
+    content_lines.append(f"BT /F1 16 Tf 50 760 Td ({_pdf_escape(title)}) Tj ET")
+    y = 740
+    for row in rows:
+        if y < 60:
+            break
+        content_lines.append(f"BT /F1 10 Tf 50 {y} Td ({_pdf_escape(row)}) Tj ET")
+        y -= 14
+
+    stream = "\n".join(content_lines).encode("latin1")
+    length = len(stream)
+
+    objects = []
+    objects.append(b"1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj")
+    objects.append(b"2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj")
+    objects.append(b"3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >> endobj")
+    objects.append(b"4 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj")
+    objects.append(b"5 0 obj << /Length " + str(length).encode("utf-8") + b" >> stream\n" + stream + b"\nendstream endobj")
+
+    pdf_body = [b"%PDF-1.4"]
+    offsets = []
+    pos = len(pdf_body[0]) + 1
+    for obj in objects:
+        offsets.append(pos)
+        pdf_body.append(obj)
+        pos += len(obj) + 1
+
+    xref = [b"xref", f"0 {len(objects) + 1}".encode("utf-8"), b"0000000000 65535 f "]
+    for off in offsets:
+        xref.append(f"{off:010d} 00000 n ".encode("utf-8"))
+
+    startxref = pos + sum(len(x) + 1 for x in xref)
+    trailer = [b"trailer << /Size " + str(len(objects) + 1).encode("utf-8") + b" /Root 1 0 R >>", b"startxref " + str(startxref).encode("utf-8"), b"%%EOF"]
+    pdf_bytes = b"\n".join(pdf_body + xref + trailer)
+    return pdf_bytes
+
 st.set_page_config(page_title="Relatórios", page_icon="📊", layout="wide")
 auth.require_auth()
 
@@ -85,6 +128,7 @@ st.subheader("📋 Histórico de Tarefas")
 
 filter_s = st.selectbox("Filtrar por status", ["Todas","Pendente","Em andamento","Concluída"])
 filtered = tasks if filter_s == "Todas" else [t for t in tasks if t.get("status") == filter_s]
+rows = []
 
 if filtered:
     rows = []
@@ -104,26 +148,36 @@ st.markdown("---")
 
 # ── Exportar ───────────────────────────────────────────────────────────────────
 st.subheader("⬇️ Exportar Dados")
-ec1, ec2 = st.columns(2)
+ec1, ec2, ec3 = st.columns(3)
 
-# CSV
-if ec1.button("📄 Exportar Tarefas em CSV", use_container_width=True):
-    lines = ["Título,Disciplina,Prazo,Status,Prioridade"]
-    for t in tasks:
-        lines.append(",".join([
-            f'"{t.get("title","")}"',
-            f'"{subj_map.get(t.get("subject_id"),"—")}"',
-            f'"{(t.get("due_date","")[:10]) or ""}"',
-            f'"{t.get("status","")}"',
-            f'"{t.get("priority","")}"',
-        ]))
-    csv_bytes = "\n".join(lines).encode("utf-8")
-    st.download_button("⬇️ Baixar CSV", csv_bytes, "tarefas_edutrack.csv", "text/csv",
-                       key="dl_csv")
+with ec1:
+    if st.button("📄 Exportar Tarefas em CSV", use_container_width=True, key="btn_csv_export"):
+        lines = ["Título,Disciplina,Prazo,Status,Prioridade"]
+        for row in rows:
+            lines.append(",".join([
+                f'"{row["Título"]}"',
+                f'"{row["Disciplina"]}"',
+                f'"{row["Prazo"]}"',
+                f'"{row["Status"]}"',
+                f'"{row["Prioridade"]}"',
+            ]))
+        csv_bytes = "\n".join(lines).encode("utf-8")
+        st.download_button("⬇️ Baixar CSV", csv_bytes, "tarefas_edutrack.csv", "text/csv",
+                           key="dl_csv")
 
-# JSON
-if ec2.button("🗂️ Exportar Dados Completos (JSON)", use_container_width=True):
-    export = {"subjects": subjects, "tasks": tasks}
-    json_bytes = json.dumps(export, ensure_ascii=False, indent=2).encode("utf-8")
-    st.download_button("⬇️ Baixar JSON", json_bytes, "edutrack_backup.json", "application/json",
-                       key="dl_json")
+with ec2:
+    if st.button("📄 Exportar Tarefas em PDF", use_container_width=True, key="btn_pdf_export"):
+        pdf_rows = [
+            f"{row['Título']} | {row['Disciplina']} | {row['Prazo']} | {row['Status']} | {row['Prioridade']}"
+            for row in rows
+        ]
+        pdf_bytes = generate_pdf_report(pdf_rows, title="Relatório de Tarefas")
+        st.download_button("⬇️ Baixar PDF", pdf_bytes, "tarefas_edutrack.pdf", "application/pdf",
+                           key="dl_pdf")
+
+with ec3:
+    if st.button("🗂️ Exportar Dados Completos (JSON)", use_container_width=True, key="btn_json_export"):
+        export = {"subjects": subjects, "tasks": filtered}
+        json_bytes = json.dumps(export, ensure_ascii=False, indent=2).encode("utf-8")
+        st.download_button("⬇️ Baixar JSON", json_bytes, "edutrack_backup.json", "application/json",
+                           key="dl_json")

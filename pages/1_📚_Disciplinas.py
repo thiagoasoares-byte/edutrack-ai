@@ -7,6 +7,11 @@ import utils.auth as auth
 import utils.ui as ui
 from datetime import date
 
+SUBJECT_COLORS = [
+    "#FF8A65", "#4DB6AC", "#9575CD", "#FDD835", "#64B5F6",
+    "#A1887F", "#81C784", "#BA68C8", "#FFB74D", "#90A4AE"
+]
+
 ui.apply_theme(page_title="Disciplinas", page_icon="📚", layout="wide")
 auth.require_auth()
 
@@ -33,6 +38,13 @@ def load_subjects(search="", only_overdue=False):
         items = [s for s in items if s.get("has_overdue")]
     return items
 
+
+def subject_color_map(subjects):
+    return {
+        s["id"]: SUBJECT_COLORS[i % len(SUBJECT_COLORS)]
+        for i, s in enumerate(subjects)
+    }
+
 def load_tasks_for_subject(subject_id):
     try:
         data = api.get("academic_tasks", "/list", {"subject_id": subject_id})
@@ -56,9 +68,11 @@ with tab_lista:
     if not subjects:
         st.info("Nenhuma disciplina encontrada. Cadastre uma na aba **Nova Disciplina**.")
     else:
+        colors = subject_color_map(subjects)
         st.caption(f"{len(subjects)} disciplina(s) encontrada(s)")
         for subj in subjects:
             sid = subj.get("id")
+            subj_color = colors.get(sid, "#90A4AE")
             # Calcular progresso por disciplina via tasks
             tasks = load_tasks_for_subject(sid)
             total_t = len(tasks)
@@ -72,7 +86,11 @@ with tab_lista:
                 hcol1, hcol2 = st.columns([4,1])
                 with hcol1:
                     badge = " 🔴" if overdue else ""
-                    st.markdown(f"### {subj.get('name','')}{badge}")
+                    st.markdown(
+                        f"<div style='display:flex;align-items:center;gap:10px;'>"
+                        f"<span style='width:14px;height:14px;border-radius:50%;background:{subj_color};display:inline-block;'></span>"
+                        f"<span style='font-size:24px;font-weight:700;color:{subj_color};'>{subj.get('name','')}{badge}</span>"
+                        f"</div>", unsafe_allow_html=True)
                     st.caption(f"👨‍🏫 {subj.get('teacher','—')}  •  📝 {total_t} tarefa(s)  •  Semestre: {subj.get('semester','—')}")
                     if total_t:
                         st.progress(prog / 100, text=f"{prog}% concluído")
