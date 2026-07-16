@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { get } from '../../lib/api';
+import { get } from '../lib/api';
 import { format, subDays, isBefore, parseISO, differenceInCalendarDays } from 'date-fns';
 
 export default function Home({ user }) {
   const router = useRouter();
+  const [user, setUser] = useState(null);
   const [subjects, setSubjects] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -175,7 +176,7 @@ export default function Home({ user }) {
 
       {/* Progress Bar */}
       <section className="py-6">
-        <div className="max-w-7xl: 7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold mb-4">📊 Progresso das Tarefas</h2>
           <div className="bg-gray-700 rounded-full h-4">
             <div

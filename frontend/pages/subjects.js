@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { get, post, patch, del } from '../../lib/api';
+import { get, post, patch, del } from '../lib/api';
 
 export default function Subjects({ user }) {
   const router = useRouter();

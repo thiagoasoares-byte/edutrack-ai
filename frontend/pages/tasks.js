@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { get, post, patch, del } from '../../lib/api';
-import { getCurrentUser } from '../../lib/auth';
+import { get, post, patch, del } from '../lib/api';
+import { getCurrentUser } from '../lib/auth';
 import { format, parseISO, isBefore, differenceInCalendarDays } from 'date-fns';
 
 export default function Tasks({ user }) {
@@ -276,7 +276,7 @@ export default function Tasks({ user }) {
               </button>
             </div>
           </form>
-        </date>
+        </div>
       </section>
 
       {/* Tasks List */}

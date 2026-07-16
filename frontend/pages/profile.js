@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { updateProfile } from '../../lib/api';
+import { updateProfile } from '../lib/api';
 
 export default function Profile({ user }) {
   const router = useRouter();

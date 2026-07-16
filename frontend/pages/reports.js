@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { get } from '../../lib/api';
-import { getCurrentUser } from '../../lib/auth';
+import { get } from '../lib/api';
+import { getCurrentUser } from '../lib/auth';
 import { format, parseISO, differenceInCalendarDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 
 export default function Reports({ user }) {
@@ -152,7 +152,7 @@ export default function Reports({ user }) {
             </div>
 
             {/* Pending Tasks */}
-            <div className="bg-gray-800 rounded-xl p-6">
+            <div className="bg-gray-800 rounded-xl p-6>
               <h3 className="text-lg font-semibold mb-3 flex items-center">
                 <span className="mr-2">⏳</span> Tarefas Pendentes
               </h3>
